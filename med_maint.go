@@ -1,9 +1,11 @@
 package main
 import(
-  // "github.com/diebels727/readline"
+  "github.com/diebels727/readline"
   "container/heap"
   "fmt"
-  "time")
+  "time"
+  "strconv"
+  )
 
 type HighHeap []int
 type LowHeap []int
@@ -63,12 +65,12 @@ func Balance(low_heap *LowHeap,high_heap *HighHeap) {
   h := *high_heap
   l_len := len(l)
   h_len := len(l)
-  if l_len < high_len {
+  if l_len < h_len {
     max := l.ExtractMax()
-    heap.Push(h,max)
+    heap.Push(&h,max)
   } else {  //l_len > high_len
     min := h.ExtractMin()
-    heap.Push(l,min)
+    heap.Push(&l,min)
   }
 }
 
@@ -79,18 +81,16 @@ func runtime(fn func()) {
   fmt.Println("runtime: ",elapsed)
 }
 
-// func Mapper(str string) {
-//
-// }
+func Mapper(str string) {
+  a,_ := strconv.ParseInt(str,10,0)
+  fmt.Println(a)
+}
 
 
 func main() {
-  h := &HighHeap{4,5,6,1,3,4}
-  heap.Init(h)
-  heap.Push(h,7)
-  heap.Push(h,-7)
-  fmt.Println(h.ExtractMin())
-  fmt.Println(h)
-  // readline.Map("Median.txt",Mapper)
-
+  // h := &HighHeap{}
+  // l := &LowHeap{}
+  // heap.Init(h)
+  // heap.Init(l)
+  readline.Map("Median.txt",Mapper)
 }
