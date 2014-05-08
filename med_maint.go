@@ -83,14 +83,30 @@ func runtime(fn func()) {
 
 func Mapper(str string) {
   a,_ := strconv.ParseInt(str,10,0)
-  fmt.Println(a)
+  //get heaps
+
+  //if minimum or maximum undef, handle
+  //get minimum from high heap and maximum from low heap
+  //compare minimum and maximum to a
+  //if a > maximum in low heap
+    //insert in to high heap
+  //else if a < minimum in high heap
+    //insert in to low heap
+
+  //rebalance heaps
+
+  //compute median
+
+  heap.Push(h,int(a))
 }
 
+var h *HighHeap
+var l *LowHeap
 
 func main() {
-  // h := &HighHeap{}
-  // l := &LowHeap{}
-  // heap.Init(h)
-  // heap.Init(l)
+  h = &HighHeap{}
+  l = &LowHeap{}
+  heap.Init(h)
+  heap.Init(l)
   readline.Map("Median.txt",Mapper)
 }
