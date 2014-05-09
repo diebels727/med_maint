@@ -72,19 +72,19 @@ func Rebalance() {
 }
 
 func ComputeMedian() {
-  var median float32
+  var median int
   total_len := len(*l)+len(*h)
   if ( total_len % 2 == 0) {
-    median = float32( (*l)[0] )
-    // median = float32( (float32((*l)[0]) + float32((*h)[0])) / 2 )
+    median = (*l)[0]
   } else {
-    if (len(*l) % 2 != 0) {
-      median = float32( (*l)[0] )
-    }
-    if (len(*h) % 2 != 0) {
-      median = float32( (*h)[0] )
+    if (len(*l) > len(*h)) {
+      median = (*l)[0]
+    } else {
+      median = (*h)[0]
     }
   }
+  fmt.Println("h: ",*h)
+  fmt.Println("l: ",*l)
   fmt.Println("median: ",median)
   total += median
 }
@@ -114,16 +114,17 @@ func Mapper(str string) {
       }
     } else {
       max := (*l)[0]
-      min := (*h)[0]
+      // min := (*h)[0]
       if v > max {
         heap.Push(h,v)
-      }
-      if v <= min {
+      } else {
         heap.Push(l,v)
       }
     }
   }
-
+  // fmt.Println("---")
+  // fmt.Println("h: ",*h)
+  // fmt.Println("l: ",*l)
   Rebalance()
   ComputeMedian()
 
@@ -143,7 +144,7 @@ func Mapper(str string) {
 var h *HighHeap
 var l *LowHeap
 var line int
-var total float32
+var total int
 
 func main() {
   line = 0
@@ -162,9 +163,6 @@ func main() {
   l = &LowHeap{}
   // readline.Map("Median.txt",Mapper)
   readline.Map("tc2.txt",Mapper)
-
-  fmt.Println(h)
-  fmt.Println(l)
   fmt.Println(total)
   modded := int64(total) % 10000
   fmt.Println(modded)
