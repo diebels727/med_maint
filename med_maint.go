@@ -83,9 +83,9 @@ func ComputeMedian() {
       median = (*h)[0]
     }
   }
-  fmt.Println("h: ",*h)
-  fmt.Println("l: ",*l)
-  fmt.Println("median: ",median)
+  // fmt.Println("h: ",*h)
+  // fmt.Println("l: ",*l)
+  // fmt.Println("median: ",median)
   total += median
 }
 
@@ -161,8 +161,8 @@ func main() {
   //6
   h = &HighHeap{}
   l = &LowHeap{}
-  // readline.Map("Median.txt",Mapper)
-  readline.Map("tc2.txt",Mapper)
+  readline.Map("Median.txt",Mapper)
+  // readline.Map("tc1.txt",Mapper)
   fmt.Println(total)
   modded := int64(total) % 10000
   fmt.Println(modded)
