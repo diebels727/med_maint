@@ -1,6 +1,6 @@
 package main
 import(
-  "github.com/diebels727/readline"
+  // "github.com/diebels727/readline"
   "container/heap"
   "fmt"
   "time"
@@ -60,17 +60,14 @@ func (h *LowHeap) ExtractMax() int {
   return x
 }
 
-func Balance(low_heap *LowHeap,high_heap *HighHeap) {
-  l := *low_heap
-  h := *high_heap
-  l_len := len(l)
-  h_len := len(l)
-  if l_len < h_len {
-    max := l.ExtractMax()
-    heap.Push(&h,max)
-  } else {  //l_len > high_len
-    min := h.ExtractMin()
-    heap.Push(&l,min)
+func Rebalance() {
+  if len(*l) > len(*h) {
+    max := (*l).ExtractMax()
+    heap.Push(h,max)
+  }
+  if len(*l) < len(*h) {  //len(*l) >= len(*h)
+    min := (*h).ExtractMin()
+    heap.Push(l,min)
   }
 }
 
@@ -82,34 +79,21 @@ func runtime(fn func()) {
 }
 
 func Mapper(str string) {
-  var b int
   a,_ := strconv.ParseInt(str,10,0)
-  b = int(a)
-  //get heaps
-  temp_h := *h
-  temp_l := *l
+  v := int(a)
 
-
-
-  if len(temp_l) == 0 && len(temp_h) == 0 {
-    heap.Push(l,b)  //push in to min
+  if line == 0 {
+    heap.Push(l,v)
+    line++
   }
 
-  if len(temp_l) > 0 && len(temp_h) == 0 {
-    heap.Push(h,b)
-  }
-  if len(temp_l) == 0 && len(temp_h) > 0 {
-    heap.Push(l,b)
-  }
-
-  if len(temp_l) > 0 && len(temp_h) > 0 {
-    max_l := temp_l[0]
-    min_h := temp_h[0]
-    if b > max_l {
-      heap.Push(h,b)
-    }
-    if b <= min_h {
-      heap.Push(l,b)
+  if line == 1 {
+    max := (*l)[0]
+    if v > max {
+      heap.Push(h,v)
+      line++
+    } else {
+      heap.Push(l,v)
     }
   }
 
@@ -128,13 +112,34 @@ func Mapper(str string) {
 
 var h *HighHeap
 var l *LowHeap
+var line int
 
 func main() {
+  line = 0
+  // h = &HighHeap{}
+  // l = &LowHeap{}
+  // heap.Init(h)
+  // heap.Init(l)
+  // readline.Map("Median.txt",Mapper)
+  // fmt.Println(len(*h))
+  // fmt.Println(len(*l))
+
+  //1 2 3 6 7
+
+  //6
   h = &HighHeap{}
   l = &LowHeap{}
-  heap.Init(h)
-  heap.Init(l)
-  readline.Map("Median.txt",Mapper)
-  fmt.Println(len(*h))
-  fmt.Println(len(*l))
+
+  heap.Push(h,7)
+  heap.Push(h,8)
+  heap.Push(l,6)
+  Rebalance()
+  fmt.Println("low heap:",*l)
+  fmt.Println("high heap:",*h)
+  fmt.Println((*l)[0])
+  fmt.Println((*h)[0])
+
+
+  // fmt.Println(h)
+  // fmt.Println(*l)
 }
