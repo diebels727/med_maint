@@ -1,6 +1,6 @@
 package main
 import(
-  // "github.com/diebels727/readline"
+  "github.com/diebels727/readline"
   "container/heap"
   "fmt"
   "time"
@@ -71,6 +71,24 @@ func Rebalance() {
   }
 }
 
+func ComputeMedian() {
+  var median float32
+  total_len := len(*l)+len(*h)
+  if ( total_len % 2 == 0) {
+    median = float32( (*l)[0] )
+    // median = float32( (float32((*l)[0]) + float32((*h)[0])) / 2 )
+  } else {
+    if (len(*l) % 2 != 0) {
+      median = float32( (*l)[0] )
+    }
+    if (len(*h) % 2 != 0) {
+      median = float32( (*h)[0] )
+    }
+  }
+  fmt.Println("median: ",median)
+  total += median
+}
+
 func runtime(fn func()) {
   start := time.Now()
   fn()
@@ -85,17 +103,29 @@ func Mapper(str string) {
   if line == 0 {
     heap.Push(l,v)
     line++
-  }
-
-  if line == 1 {
-    max := (*l)[0]
-    if v > max {
-      heap.Push(h,v)
-      line++
+  } else {
+    if line == 1 {
+      max := (*l)[0]
+      if v > max {
+        heap.Push(h,v)
+        line++
+      } else {
+        heap.Push(l,v)
+      }
     } else {
-      heap.Push(l,v)
+      max := (*l)[0]
+      min := (*h)[0]
+      if v > max {
+        heap.Push(h,v)
+      }
+      if v <= min {
+        heap.Push(l,v)
+      }
     }
   }
+
+  Rebalance()
+  ComputeMedian()
 
   //if minimum or maximum undef, handle
   //get minimum from high heap and maximum from low heap
@@ -113,14 +143,15 @@ func Mapper(str string) {
 var h *HighHeap
 var l *LowHeap
 var line int
+var total float32
 
 func main() {
   line = 0
+  total = 0
   // h = &HighHeap{}
   // l = &LowHeap{}
   // heap.Init(h)
   // heap.Init(l)
-  // readline.Map("Median.txt",Mapper)
   // fmt.Println(len(*h))
   // fmt.Println(len(*l))
 
@@ -129,17 +160,24 @@ func main() {
   //6
   h = &HighHeap{}
   l = &LowHeap{}
+  // readline.Map("Median.txt",Mapper)
+  readline.Map("tc2.txt",Mapper)
 
-  heap.Push(h,7)
-  heap.Push(h,8)
-  heap.Push(l,6)
-  Rebalance()
-  fmt.Println("low heap:",*l)
-  fmt.Println("high heap:",*h)
-  fmt.Println((*l)[0])
-  fmt.Println((*h)[0])
-
-
+  fmt.Println(h)
+  fmt.Println(l)
+  fmt.Println(total)
+  modded := int64(total) % 10000
+  fmt.Println(modded)
+  // fmt.Println(len(*h))
+  // fmt.Println(len(*l))
+  // heap.Push(h,7)
+  // heap.Push(h,8)
+  // heap.Push(l,6)
+  // Rebalance()
+  // fmt.Println("low heap:",*l)
+  // fmt.Println("high heap:",*h)
+  // fmt.Println((*l)[0])
+  // fmt.Println((*h)[0])
   // fmt.Println(h)
   // fmt.Println(*l)
 }
